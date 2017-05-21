@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 
 const defaultBottomOffset = 0
@@ -6,7 +7,6 @@ const defaultBottomOffset = 0
 export default class extends React.Component {
   /*
   This is the component for infnity scroll.
-  TODO implement the usage of `loader`
   */
   static propTypes = {
     pageStart: PropTypes.number.isRequired,
@@ -22,10 +22,16 @@ export default class extends React.Component {
       'page': this.props.pageStart,
       'loader': this.props.loader,
       'bottomOffset': this.props.bottomOffset ? this.props.bottomOffset : defaultBottomOffset,
+      'blocking': false,
     }
   }
+
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   }
 
   handleScroll = (e) => {

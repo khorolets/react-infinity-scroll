@@ -2,7 +2,7 @@
   "name": "react-infinity-scroll",
   "description": "Simple and small infinity scroll component",
   "main": "dist/index.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Bohdan Khorolets <b@khorolets.com",
   "license": "MIT",
   "keywords": [
@@ -51,6 +51,7 @@
     "webpack-dev-server": "1.14.1"
   },
   "dependencies": {
+    "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   }
