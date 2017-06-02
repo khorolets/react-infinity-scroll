@@ -1,6 +1,13 @@
 # react-infinity-scroll
 
 Small React component for implementing infinity scroll
+
+## Demo
+
+I've created a demo with `create-react-app` so you can see my component in action. The source can be found in `gh-pages` branch, don't judge me, please, I was in a hurry.
+
+Demo: https://khorolets.github.io/react-infinity-scroll/
+
 ### Installation
 
 ```
@@ -37,12 +44,20 @@ export default class extends React.Component {
     )
   }
 
-  loadMore = (page) => {
+  loadMore = (page, callback = undefined) => {
     getCriticsReviewsByCriticId(page).then((res) => {
       this.setState(
         {
-          reviews: this.state.reviews.concat(res.data.results.map((review) => (<Review title={review.title} />))),
+          reviews: [
+            ...this.state.reviews,
+            res.data.results.map((review) => (<Review title={review.title} />))
+          ],
           hasMore: (res.data.next)
+        },
+        () => {
+          if (callback !== undefined) {
+            callback()
+          }
         }
       )
     })
@@ -69,4 +84,3 @@ export default class extends React.Component {
 
 * React 8 (infinity) https://www.npmjs.com/package/react-8
 * react-infinity-scroller https://www.npmjs.com/package/react-infinity-scroller
-
