@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'react'], factory);
+    define(['exports', 'react', 'prop-types'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('react'));
+    factory(exports, require('react'), require('prop-types'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.react);
+    factory(mod.exports, global.react, global.propTypes);
     global.index = mod.exports;
   }
-})(this, function (exports, _react) {
+})(this, function (exports, _react, _propTypes) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -18,6 +18,8 @@
   });
 
   var _react2 = _interopRequireDefault(_react);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -84,6 +86,7 @@
       var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
 
       _this.handleScroll = function (e) {
+        console.log(window.pageYOffset + window.innerHeight >= document.body.offsetHeight - _this.state.bottomOffset);
         if (window.pageYOffset + window.innerHeight >= document.body.offsetHeight - _this.state.bottomOffset && _this.props.hasMore && !_this.state.blocking) {
           _this.setState({ blocking: true });
           _this.setState({ page: _this.state.page + 1 });
@@ -96,13 +99,13 @@
       _this.state = {
         'page': _this.props.pageStart,
         'loader': _this.props.loader,
-        'bottomOffset': _this.props.bottomOffset ? _this.props.bottomOffset : defaultBottomOffset
+        'bottomOffset': _this.props.bottomOffset ? _this.props.bottomOffset : defaultBottomOffset,
+        'blocking': false
       };
       return _this;
     }
     /*
     This is the component for infnity scroll.
-    TODO implement the usage of `loader`
     */
 
 
@@ -132,11 +135,11 @@
   }(_react2.default.Component);
 
   _class.propTypes = {
-    pageStart: _react.PropTypes.number.isRequired,
-    loadMore: _react.PropTypes.func.isRequired,
-    hasMore: _react.PropTypes.bool.isRequired,
-    loader: _react.PropTypes.element,
-    bottomOffset: _react.PropTypes.number
+    pageStart: _propTypes2.default.number.isRequired,
+    loadMore: _propTypes2.default.func.isRequired,
+    hasMore: _propTypes2.default.bool.isRequired,
+    loader: _propTypes2.default.element,
+    bottomOffset: _propTypes2.default.number
   };
   exports.default = _class;
 });

@@ -79,6 +79,62 @@ export default class extends React.Component {
 }
 ```
 
+### Using `InfinityScroll` inside other elements (e.g. modals)
+
+If you need to use `InfinityScroll` in modal or other div which is scrollable you need to listen that scroll instead of default `window` one.
+
+`InfinityScroll` won't add listeners to `window` if you provide `bottomOffsetValue` which is representing current distance to the bottom of the element.
+
+So you need manually to:
+
+1. Add listener to an element that has a scroll you're interested in.
+
+```javascript
+componentDidMount() {
+  document.getElementsByClassName('vmodal-wrapper')[0]
+    .addEventListener('scroll', this._calculateOffset)
+}
+
+componentWillUnmount() {
+  document.getElementsByClassName('vmodal-wrapper')[0]
+    .removeEventListener('scroll', this._calculateOffset)
+}
+```
+
+
+2. Create a method that calculates current offset
+
+```javascript
+_calculateOffset = () => {
+    const modalWrapper = document.getElementsByClassName('vmodal-wrapper')[0]
+    const modalBody = document.getElementsByClassName('vmodal-body')[0]
+    return this.setState(
+      {
+        bottomOffsetValue: modalBody.offsetHeight - modalWrapper.scrollTop,
+      }
+    )
+  }
+```
+
+3. Pass that method to `InfinityScroll`
+
+```javascript
+<InfinityScroll
+  pageStart={1}
+  bottomOffset={1000}
+
+  bottomOffsetValue={this.state.bottomOffsetValue}
+
+  loadMore={this.props.loadMore}
+  hasMore={this.props.hasMore}
+  loader={<div className="text-center loader">Loading...</div>}
+>
+...
+</InfinityScroll>
+```
+
+That's it.
+
 
 ### You may also be interested
 

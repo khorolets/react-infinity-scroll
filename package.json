@@ -2,7 +2,7 @@
   "name": "react-infinity-scroll",
   "description": "Simple and small infinity scroll component",
   "main": "dist/index.js",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Bohdan Khorolets <b@khorolets.com",
   "license": "MIT",
   "keywords": [

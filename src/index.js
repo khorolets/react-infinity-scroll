@@ -14,6 +14,7 @@ export default class extends React.Component {
     hasMore: PropTypes.bool.isRequired,
     loader: PropTypes.element,
     bottomOffset: PropTypes.number,
+    bottomOffsetValue: PropTypes.number,
   }
 
   constructor(props) {
@@ -27,26 +28,55 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    if (!('bottomOffsetValue' in this.props)) {
+      window.addEventListener('scroll', this.handleWindowScroll);
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    if (!('bottomOffsetValue' in this.props)) {
+      window.removeEventListener('scroll', this.handleWindowScroll);
+    }
   }
 
-  handleScroll = (e) => {
+  componentWillUpdate(nextProps) {
+    if ('bottomOffsetValue' in nextProps) {
+      if (nextProps.bottomOffsetValue !== this.props.bottomOffsetValue) {
+        this.handleOffset(nextProps.bottomOffsetValue)
+      }
+    }
+  }
+
+  handleWindowScroll = (e) => {
     if (
         window.pageYOffset + window.innerHeight >= document.body.offsetHeight - this.state.bottomOffset
         && this.props.hasMore
         && !this.state.blocking
       ) {
-      this.setState({ blocking: true })
-      this.setState({ page: this.state.page + 1 })
-      this.props.loadMore(this.state.page, () => {
-        this.setState({ blocking: false })
-      })
+      this._performFetch()
     }
   }
+
+  handleOffset = (bottomOffsetValue) => {
+    if (this.state.bottomOffset >= bottomOffsetValue
+        && this.props.hasMore
+        && !this.state.blocking
+      ) {
+      this._performFetch()
+    }
+  }
+
+  _performFetch = () => {
+      this.setState({ blocking: true })
+      this.setState({ page: this.state.page + 1 })
+      this.setState({ page: this.state.page + 1 }, () => {
+        this.props.loadMore(
+          this.state.page,
+          () => { this.setState({ blocking: false }) }
+        )
+      })
+  }
+
   render() {
     return (
       <div>
